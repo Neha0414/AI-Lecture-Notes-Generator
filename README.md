@@ -16,7 +16,7 @@ An AI-powered application that converts lecture recordings into study material.
 * Python
 * Streamlit
 * Whisper
-* Ollama
+* Groq
 * Gemma 3
 * ReportLab
 
