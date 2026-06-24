@@ -1,6 +1,7 @@
 streamlit
-openai-whisper
 groq
+openai-whisper==20250625
 torch
+ffmpeg-python
 transformers
 sentencepiece
