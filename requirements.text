@@ -1,5 +1,2 @@
-streamlit
-groq>=0.4.0
-transformers
-sentencepiece
-requests
+streamlit==1.36.0
+groq
