@@ -4,6 +4,13 @@ import subprocess
 import streamlit as st
 
 # =========================
+# GROQ API KEY
+# =========================
+
+if "GROQ_API_KEY" in st.secrets:
+    os.environ["GROQ_API_KEY"] = st.secrets["GROQ_API_KEY"]
+
+# =========================
 # PAGE CONFIG
 # =========================
 

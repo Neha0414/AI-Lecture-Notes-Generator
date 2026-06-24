@@ -1,6 +1,6 @@
 streamlit
 openai-whisper
-ollama
+groq
 torch
 transformers
 sentencepiece

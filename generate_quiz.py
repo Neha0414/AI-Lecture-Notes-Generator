@@ -1,26 +1,95 @@
-import ollama
+# import ollama
 
-with open("transcripts/transcript.txt", "r", encoding="utf-8") as file:
+# with open("transcripts/transcript.txt", "r", encoding="utf-8") as file:
+#     transcript = file.read()
+
+# prompt = f"""
+# You are a quiz generator.
+
+# TASK:
+# Generate exactly 10 multiple-choice questions from the lecture.
+
+# RULES:
+# - Generate ONLY the quiz.
+# - DO NOT repeat the lecture transcript.
+# - DO NOT summarize the lecture.
+# - DO NOT write "Transcript".
+# - DO NOT include any content other than the quiz.
+# - Generate exactly 10 questions.
+# - Each question must have 4 options.
+# - Include the correct answer.
+# - Include a short explanation.
+
+# FORMAT:
+
+# # Quiz
+
+# ## Question 1
+
+# Question text
+
+# A. Option A
+# B. Option B
+# C. Option C
+# D. Option D
+
+# Correct Answer: A
+
+# Explanation: Explanation here.
+
+# ---
+
+# LECTURE:
+# {transcript}
+# """
+# response = ollama.chat(
+#     model="gemma3:1b",
+#     messages=[
+#         {
+#             "role": "user",
+#             "content": prompt
+#         }
+#     ]
+# )
+
+# quiz = response["message"]["content"]
+
+# with open("quizzes/quiz.txt", "w", encoding="utf-8") as file:
+#     file.write(quiz)
+
+# print(quiz)
+
+
+from groq import Groq
+import os
+
+client = Groq(
+    api_key=os.environ.get("GROQ_API_KEY")
+)
+
+os.makedirs("quizzes", exist_ok=True)
+
+with open(
+    "transcripts/transcript.txt",
+    "r",
+    encoding="utf-8"
+) as file:
     transcript = file.read()
 
 prompt = f"""
-You are a quiz generator.
+You are an expert teacher and exam creator.
 
-TASK:
-Generate exactly 10 multiple-choice questions from the lecture.
+Create EXACTLY 10 multiple-choice questions from the lecture.
 
-RULES:
-- Generate ONLY the quiz.
-- DO NOT repeat the lecture transcript.
-- DO NOT summarize the lecture.
-- DO NOT write "Transcript".
-- DO NOT include any content other than the quiz.
-- Generate exactly 10 questions.
+Requirements:
+- Questions must be based only on the lecture.
 - Each question must have 4 options.
-- Include the correct answer.
-- Include a short explanation.
+- Provide the correct answer.
+- Provide a short explanation.
+- Do NOT include the transcript.
+- Use clean markdown formatting.
 
-FORMAT:
+Format:
 
 # Quiz
 
@@ -39,11 +108,13 @@ Explanation: Explanation here.
 
 ---
 
-LECTURE:
+Lecture Transcript:
+
 {transcript}
 """
-response = ollama.chat(
-    model="gemma3:1b",
+
+response = client.chat.completions.create(
+    model="llama-3.1-8b-instant",
     messages=[
         {
             "role": "user",
@@ -52,10 +123,13 @@ response = ollama.chat(
     ]
 )
 
-quiz = response["message"]["content"]
+quiz = response.choices[0].message.content
 
-with open("quizzes/quiz.txt", "w", encoding="utf-8") as file:
+with open(
+    "quizzes/quiz.txt",
+    "w",
+    encoding="utf-8"
+) as file:
     file.write(quiz)
 
-print(quiz)
-
+print("Quiz generated successfully!")

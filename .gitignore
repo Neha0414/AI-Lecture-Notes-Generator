@@ -14,3 +14,4 @@ transcripts/
 notes/
 quizzes/
 flashcards/
+.streamlit/secrets.toml
